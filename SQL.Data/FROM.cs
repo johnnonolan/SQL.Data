@@ -1,16 +1,11 @@
-﻿namespace SQL.Data.Specifications
+﻿namespace SQL.Data
 {
-    public class FROM : SQLSTATEMENTPART
+    public class FROM : SQLSTATEMENTFRAGMENT
     {
-        public static SQLSTATEMENTPART users()
-        {
-            
-            return new SQLSTATEMENTPART("FROM"+" USERS");
-        }
 
-        public static new string ToString()
+        public override string ToString()
         {
-            return "FROM";
+            return "FROM ";
         }
 
     }

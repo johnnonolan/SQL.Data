@@ -1,15 +1,15 @@
-﻿namespace SQL.Data.Specifications
+﻿namespace SQL.Data
 {
-    public class SELECTOPERATOR : SQLSTATEMENTPART
+    public class SELECTOPERATOR : SQLSTATEMENTFRAGMENT
     {
         internal SELECTOPERATOR()
         {
-            _statementPart = "SELECT";
+            StatementFragement = "SELECT";
         }
 
         public override string ToString()
         {
-            return _statementPart;
+            return StatementFragement;
         }
     }
 }
