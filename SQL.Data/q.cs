@@ -1,8 +1,12 @@
-﻿namespace SQL.Data
+﻿using System;
+
+namespace SQL.Data
 {
     public class q
     {
-        public static SELECTOPERATOR SELECT = new SELECTOPERATOR();
-        public static dynamic FROM= new SQLSTATEMENTFRAGMENT("FROM");
+        public static SelectOperator SELECT = new SelectOperator();
+        public static dynamic FROM= new SqlStatementFragment("FROM");
+
+        public static string ConnectionString { get;set; }
     }
 }   

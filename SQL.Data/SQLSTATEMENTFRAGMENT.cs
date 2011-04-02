@@ -1,19 +1,45 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data.SqlServerCe;
 using System.Dynamic;
 
 namespace SQL.Data
 {
-    public class SQLSTATEMENTFRAGMENT : DynamicObject
+    public class SqlStatementFragment : DynamicObject
     {
         protected  string StatementFragement ="";
-        protected SQLSTATEMENTFRAGMENT()
-        {
-                
-        }
-        public SQLSTATEMENTFRAGMENT(string statementFragement)
+        protected SqlStatementFragment()
+        {}
+
+        public SqlStatementFragment(string statementFragement)
         {
             StatementFragement = statementFragement;
+        }
+
+
+
+        public IEnumerable<DataRecord> GO()
+        {
+            List<DataRecord> newList =  new List<DataRecord>();;
+            using (var connection = new SqlCeConnection(@"Data Source=TestDB.sdf"))
+            using (var command = new SqlCeCommand(this.ToString()))
+            {
+                command.Connection = connection;
+                connection.Open();
+                
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        newList.Add(new DataRecord());
+
+                    }
+                }
+            }
+
+            return newList;
         }
 
         public override string ToString()
@@ -21,22 +47,22 @@ namespace SQL.Data
             return  StatementFragement;
         }
 
-        public static SQLSTATEMENTFRAGMENT operator * (SQLSTATEMENTFRAGMENT op1, SQLSTATEMENTFRAGMENT op2)
+        public static SqlStatementFragment operator * (SqlStatementFragment op1, SqlStatementFragment op2)
         {
-            return new SQLSTATEMENTFRAGMENT(op1+" * "+op2);
+            return new SqlStatementFragment(op1+" * "+op2);
         }
 
 
-        public static SQLSTATEMENTFRAGMENT operator ==(SQLSTATEMENTFRAGMENT op1, dynamic op2)
+        public static SqlStatementFragment operator ==(SqlStatementFragment op1, dynamic op2)
         {
-            return new SQLSTATEMENTFRAGMENT(op1 + " = " + op2);
+            return new SqlStatementFragment(op1 + " = " + op2);
         }
 
 
 
-        public static SQLSTATEMENTFRAGMENT operator !=(SQLSTATEMENTFRAGMENT op1, dynamic op2)
+        public static SqlStatementFragment operator !=(SqlStatementFragment op1, dynamic op2)
         {
-            return new SQLSTATEMENTFRAGMENT(op1 + " <> " + op2);
+            return new SqlStatementFragment(op1 + " <> " + op2);
         }
 
         // The inner dictionary.
@@ -52,7 +78,7 @@ namespace SQL.Data
 
             if (!innerDictionary.TryGetValue(name, out result))
             {
-                result = new SQLSTATEMENTFRAGMENT(ToString()+' '+ binder.Name);
+                result = new SqlStatementFragment(ToString()+' '+ binder.Name);
                 return true;
             }
             return innerDictionary.TryGetValue(name, out result);
@@ -78,9 +104,14 @@ namespace SQL.Data
                 predicateMember += o;
 
             }
-            result = new SQLSTATEMENTFRAGMENT(String.Format("{0} {1} ({2})",StatementFragement,binder.Name,predicateMember));
+            result = new SqlStatementFragment(String.Format("{0} {1} ({2})",StatementFragement,binder.Name,predicateMember));
             return true;
 
         }
+    }
+
+    public class DataRecord : DynamicObject
+    {
+
     }
 }

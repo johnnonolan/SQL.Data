@@ -1,6 +1,6 @@
 ﻿namespace SQL.Data
 {
-    public class FROM : SQLSTATEMENTFRAGMENT
+    public class FROM : SqlStatementFragment
     {
 
         public override string ToString()

@@ -1,8 +1,8 @@
 ﻿namespace SQL.Data
 {
-    public class SELECTOPERATOR : SQLSTATEMENTFRAGMENT
+    public class SelectOperator : SqlStatementFragment
     {
-        internal SELECTOPERATOR()
+        internal SelectOperator()
         {
             StatementFragement = "SELECT";
         }
