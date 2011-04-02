@@ -64,9 +64,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database1.sdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="TestDB.sdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

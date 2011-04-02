@@ -23,7 +23,7 @@ namespace SQL.Data
         public IEnumerable<DataRecord> GO()
         {
             List<DataRecord> newList =  new List<DataRecord>();;
-            using (var connection = new SqlCeConnection(@"Data Source=TestDB.sdf"))
+            using (var connection = new SqlCeConnection(q.ConnectionString))
             using (var command = new SqlCeCommand(this.ToString()))
             {
                 command.Connection = connection;
