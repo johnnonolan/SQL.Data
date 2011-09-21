@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Dynamic;
 using Machine.Specifications;
 
@@ -9,12 +8,13 @@ namespace SQL.Data.Specifications
     public class When_executing_select_from_users
     {
         Establish that = () => { 
-            q.ConnectionString = connectionString;
+            _.ConnectionString = connectionString;
         };
-        Because of = () => result = (q.SELECT * q.FROM.Users).GO();
+        Because of = () => result = (_.SELECT * _.FROM.Users).GO();
         It should_return_select_star_from_users = () => result.Count.ShouldEqual(0);
         static IList<DataRecord> result;
         static string connectionString = @"Data Source = |DataDirectory|\TestDb.sdf";
+
     }
 
     [Subject("what comes first?")]

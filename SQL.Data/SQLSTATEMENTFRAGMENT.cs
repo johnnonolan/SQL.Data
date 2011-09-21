@@ -22,19 +22,22 @@ namespace SQL.Data
 
         public IEnumerable<DataRecord> GO()
         {
-            List<DataRecord> newList =  new List<DataRecord>();;
-            using (var connection = new SqlCeConnection(q.ConnectionString))
-            using (var command = new SqlCeCommand(this.ToString()))
+            var newList =  new List<DataRecord>();
+            using (var connection = new SqlCeConnection(_.ConnectionString))
             {
-                command.Connection = connection;
-                connection.Open();
-                
-                using (var reader = command.ExecuteReader())
+                string commandText = this.ToString();
+                using (var command = new SqlCeCommand(commandText))
                 {
-                    while (reader.Read())
+                    command.Connection = connection;
+                    connection.Open();
+                
+                    using (var reader = command.ExecuteReader())
                     {
-                        newList.Add(new DataRecord());
+                        while (reader.Read())
+                        {
+                            newList.Add(new DataRecord());
 
+                        }
                     }
                 }
             }
@@ -108,10 +111,5 @@ namespace SQL.Data
             return true;
 
         }
-    }
-
-    public class DataRecord : DynamicObject
-    {
-
     }
 }

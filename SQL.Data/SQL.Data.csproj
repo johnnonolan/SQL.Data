@@ -44,9 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRecord.cs" />
     <Compile Include="FROM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="q.cs" />
+    <Compile Include="_.cs" />
     <Compile Include="SelectOperator.cs" />
     <Compile Include="SqlStatementFragment.cs" />
   </ItemGroup>
