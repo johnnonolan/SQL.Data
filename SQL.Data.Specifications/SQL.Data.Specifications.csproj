@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RegexTest.cs" />
     <Compile Include="When_inserting_into_the_client_db.cs" />
     <Compile Include="When_calling_select.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

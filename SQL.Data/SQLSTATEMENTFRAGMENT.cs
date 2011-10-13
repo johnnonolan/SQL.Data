@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data.SqlServerCe;
+using System.Diagnostics;
 using System.Dynamic;
 
 namespace SQL.Data
@@ -26,11 +25,13 @@ namespace SQL.Data
             using (var connection = new SqlCeConnection(_.ConnectionString))
             {
                 string commandText = this.ToString();
+              
+
                 using (var command = new SqlCeCommand(commandText))
                 {
                     command.Connection = connection;
                     connection.Open();
-                
+                    
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -41,12 +42,32 @@ namespace SQL.Data
                     }
                 }
             }
-
             return newList;
         }
 
         public override string ToString()
         {
+            //here we should santise.
+            if (StatementFragement.StartsWith("INSERT"))
+            {
+   
+                var openBracketPos = StatementFragement.IndexOf('(');
+                if (openBracketPos > -1)
+                {
+                
+                    var beginningFragement = StatementFragement.Substring(0, openBracketPos);
+                    var closeBracketPos = StatementFragement.IndexOf(')');
+                    var endfragment = StatementFragement.Substring(closeBracketPos,
+                                                                   StatementFragement.Length - closeBracketPos);
+
+                    var insertedFields = StatementFragement.Substring(openBracketPos, closeBracketPos - openBracketPos);
+                    var cleanedInsertedFields = insertedFields.Replace("\'", "");
+                    StatementFragement = beginningFragement + cleanedInsertedFields + endfragment;
+
+                }
+
+        }
+         
             return  StatementFragement;
         }
 
@@ -69,7 +90,7 @@ namespace SQL.Data
         }
 
         // The inner dictionary.
-        protected Dictionary<string, object> innerDictionary
+        protected Dictionary<string, object> InnerDictionary
             = new Dictionary<string, object>();
 
         // If you try to get a value of a property 
@@ -79,12 +100,12 @@ namespace SQL.Data
         {
             string name = binder.Name.ToLower();
 
-            if (!innerDictionary.TryGetValue(name, out result))
+            if (!InnerDictionary.TryGetValue(name, out result))
             {
                 result = new SqlStatementFragment(ToString()+' '+ binder.Name);
                 return true;
             }
-            return innerDictionary.TryGetValue(name, out result);
+            return InnerDictionary.TryGetValue(name, out result);
         }
 
 
@@ -93,7 +114,7 @@ namespace SQL.Data
         {
             // Converting the property name to lowercase
             // so that property names become case-insensitive.
-            innerDictionary[binder.Name.ToLower()] = value;
+            InnerDictionary[binder.Name.ToLower()] = value;
             return true;
         }
 
@@ -104,7 +125,10 @@ namespace SQL.Data
             {
                 if (predicateMember != "")
                     predicateMember += ",";
-                predicateMember += o;
+                if (o is String)
+                    predicateMember += @"'" + o + @"'";
+                else
+                    predicateMember += o;                    
 
             }
             result = new SqlStatementFragment(String.Format("{0} {1} ({2})",StatementFragement,binder.Name,predicateMember));

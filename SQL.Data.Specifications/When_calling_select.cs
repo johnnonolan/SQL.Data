@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data.SqlServerCe;
 using Machine.Specifications;
 
 namespace SQL.Data.Specifications
@@ -42,11 +44,34 @@ namespace SQL.Data.Specifications
     [Subject("")]
     public class When_calling_select_returns_a_datarecord
     {
-        Establish that = () => _.ConnectionString = connectionString;
+        Establish that = () =>
+            {
+                _.ConnectionString = connectionString;
+                //so here we should enter a record.
+                // or make sure the db is empty
+                //TRUNCATE.TABLE.Users.GO
+                SUTHelpers.DeleteUsers(connectionString);
+            };
         Because of = () => result = (_.SELECT * _.FROM.Users).GO();
         It should_return_a_data_result = () => result.ShouldBeOfType<IEnumerable<DataRecord>>();
         It should_return_zero_results = () => (result as List<DataRecord>).Count.ShouldEqual(0);
+        Cleanup after = () => SUTHelpers.DeleteUsers(connectionString);
             static Object result;
         static string connectionString = @"Data Source = |DataDirectory|\TestDb.sdf";
+    }
+
+    internal static class SUTHelpers
+    {
+        public static void DeleteUsers(string connectionString)
+        {
+            const string queryString = "DELETE FROM Users;";
+            using (var connection = new SqlCeConnection(
+               connectionString))
+            {
+                var command = new SqlCeCommand(queryString, connection);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
