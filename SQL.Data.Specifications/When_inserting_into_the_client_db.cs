@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Machine.Specifications;
 
 namespace SQL.Data.Specifications
@@ -17,7 +14,7 @@ namespace SQL.Data.Specifications
 
         };
 
-        Because of = () => _.INSERT.INTO.Users("UserID","UserName").VALUES(1,"John").GO();
+        Because of = () => _.INSERT.INTO.Users("UserID","UserName","CreatedDate").VALUES(1,"John","01-Jan-2010").GO();
 
         It should_have_one_record = () =>
             {
@@ -25,7 +22,14 @@ namespace SQL.Data.Specifications
                 result.Count.ShouldEqual(1);
             };
 
+        It should_have_stringfield_set = () =>
+            {
+                resultLine = result[0];
+                resultLine.UserName.ShouldEqual("John");
+            };
+
         Cleanup after = () => SUTHelpers.DeleteUsers(connectionString);
+        static dynamic resultLine;
         static IList<DataRecord> result;
         static string connectionString = @"Data Source = |DataDirectory|\TestDb.sdf";
 
@@ -34,6 +38,7 @@ namespace SQL.Data.Specifications
     [Subject("Inspecting SQL")]
     public class When_calling_insert_from_users
     {
+
         Because of = () => result = (_.INSERT.INTO.Users("UserID","UserName").VALUES(1,"John")).ToString();
         It should_return_a_valid_insert_statement = () => result.ShouldEqual(@"INSERT INTO Users (UserID,UserName) VALUES (1,'John')");
         static string result;

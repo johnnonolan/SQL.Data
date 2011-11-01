@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlServerCe;
-using System.Diagnostics;
 using System.Dynamic;
 
 namespace SQL.Data
 {
     public class SqlStatementFragment : DynamicObject
     {
+        // The inner dictionary.
+        protected Dictionary<string, object> InnerDictionary
+            = new Dictionary<string, object>();
+
+        
+
         protected  string StatementFragement ="";
         protected SqlStatementFragment()
         {}
@@ -29,6 +34,7 @@ namespace SQL.Data
 
                 using (var command = new SqlCeCommand(commandText))
                 {
+                    var fieldnames = new Dictionary<string, object>();
                     command.Connection = connection;
                     connection.Open();
                     
@@ -36,7 +42,20 @@ namespace SQL.Data
                     {
                         while (reader.Read())
                         {
-                            newList.Add(new DataRecord());
+                            
+                            
+  
+                            for (var i = 0; i < reader.FieldCount; i++)
+                            {
+                                //all i need is a dictionary here then I can pass it to my data record.
+                                fieldnames.Add( reader.GetName(i),reader.GetValue(i));
+                                   
+                            }
+
+                            var rec = new DataRecord(fieldnames);
+                            
+                            //TODO: now i have to populate the record
+                            newList.Add(rec);
 
                         }
                     }
@@ -66,7 +85,7 @@ namespace SQL.Data
 
                 }
 
-        }
+            }
          
             return  StatementFragement;
         }
@@ -89,9 +108,7 @@ namespace SQL.Data
             return new SqlStatementFragment(op1 + " <> " + op2);
         }
 
-        // The inner dictionary.
-        protected Dictionary<string, object> InnerDictionary
-            = new Dictionary<string, object>();
+
 
         // If you try to get a value of a property 
         // not defined in the class, this method is called.
