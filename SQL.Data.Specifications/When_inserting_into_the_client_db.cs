@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 
 namespace SQL.Data.Specifications
@@ -14,7 +15,7 @@ namespace SQL.Data.Specifications
 
         };
 
-        Because of = () => _.INSERT.INTO.Users("UserID","UserName","CreatedDate").VALUES(1,"John","01-Jan-2010").GO();
+        Because of = () => _.INSERT.INTO.Users("UserID","UserName","CreatedDate","Price").VALUES(1,"John","01-Jan-2010",200m).GO();
 
         It should_have_one_record = () =>
             {
@@ -27,6 +28,31 @@ namespace SQL.Data.Specifications
                 resultLine = result[0];
                 resultLine.UserName.ShouldEqual("John");
             };
+
+        It should_have_an_integer_set = () =>
+            {
+                resultLine = result[0];
+                resultLine.UserID.ShouldEquall(1);
+            };
+
+        It should_have_a_date_set = () =>
+            {
+                resultLine = result[0];
+                resultLine.CreatedDate.ShouldEqual(new DateTime(2010, 1, 1));
+            };
+
+        It should_have_money_set = () =>
+            {
+                resultLine = result[0];
+                resultLine.CreatedDate.ShouldEqual(200m);
+            };
+
+        It should_have_bit_field_set = () =>
+        {
+            resultLine = result[0];
+            resultLine.CreatedDate.ShouldEqual(true);
+        };
+
 
         Cleanup after = () => SUTHelpers.DeleteUsers(connectionString);
         static dynamic resultLine;
