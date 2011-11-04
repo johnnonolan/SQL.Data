@@ -30,35 +30,36 @@ namespace SQL.Data
             using (var connection = new SqlCeConnection(_.ConnectionString))
             {
                 string commandText = this.ToString();
-              
 
-                using (var command = new SqlCeCommand(commandText))
+                try
                 {
-                    var fieldnames = new Dictionary<string, object>();
-                    command.Connection = connection;
-                    connection.Open();
-                    
-                    using (var reader = command.ExecuteReader())
+                    using (var command = new SqlCeCommand(commandText))
                     {
-                        while (reader.Read())
+                        var fieldnames = new Dictionary<string, object>();
+                        command.Connection = connection;
+                        connection.Open();
+
+                        using (var reader = command.ExecuteReader())
                         {
-                            
-                            
-  
-                            for (var i = 0; i < reader.FieldCount; i++)
+                            while (reader.Read())
                             {
-                                //all i need is a dictionary here then I can pass it to my data record.
-                                fieldnames.Add( reader.GetName(i),reader.GetValue(i));
-                                   
+                                for (var i = 0; i < reader.FieldCount; i++)
+                                {
+                                    fieldnames.Add(reader.GetName(i), reader.GetValue(i));
+                                }
+
+                                var rec = new DataRecord(fieldnames);
+
+                                newList.Add(rec);
+
                             }
-
-                            var rec = new DataRecord(fieldnames);
-                            
-                            //TODO: now i have to populate the record
-                            newList.Add(rec);
-
                         }
                     }
+
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(String.Format("Exception when executing: {0}",commandText), ex);
                 }
             }
             return newList;
@@ -68,8 +69,7 @@ namespace SQL.Data
         {
             //here we should santise.
             if (StatementFragement.StartsWith("INSERT"))
-            {
-   
+            {  
                 var openBracketPos = StatementFragement.IndexOf('(');
                 if (openBracketPos > -1)
                 {
@@ -102,12 +102,10 @@ namespace SQL.Data
         }
 
 
-
         public static SqlStatementFragment operator !=(SqlStatementFragment op1, dynamic op2)
         {
             return new SqlStatementFragment(op1 + " <> " + op2);
         }
-
 
 
         // If you try to get a value of a property 
@@ -145,12 +143,24 @@ namespace SQL.Data
                 if (o is String)
                     predicateMember += @"'" + o + @"'";
                 else
-                    predicateMember += o;                    
+                    if (o is Boolean)
+                        predicateMember += ((bool)o).ToSQLBitField();
+                    else
+                        predicateMember += o;  
+                  
 
             }
             result = new SqlStatementFragment(String.Format("{0} {1} ({2})",StatementFragement,binder.Name,predicateMember));
             return true;
 
+        }
+    }
+
+    internal static class BoolExtensions
+    {
+        public static int ToSQLBitField(this bool value)
+        {
+            return value ? 1 : 0;
         }
     }
 }

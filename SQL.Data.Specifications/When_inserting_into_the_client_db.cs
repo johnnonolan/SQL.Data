@@ -15,7 +15,7 @@ namespace SQL.Data.Specifications
 
         };
 
-        Because of = () => _.INSERT.INTO.Users("UserID","UserName","CreatedDate","Price").VALUES(1,"John","01-Jan-2010",200m).GO();
+        Because of = () => _.INSERT.INTO.Users("UserID","UserName","CreatedDate","Price","Active").VALUES(1,"John","01-Jan-2010",200m,true).GO();
 
         It should_have_one_record = () =>
             {
