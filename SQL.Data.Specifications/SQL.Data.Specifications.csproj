@@ -47,10 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="When_inserting_into_the_client_db.cs" />
+    <Compile Include="When_inserting_into_the_client_table.cs" />
     <Compile Include="When_calling_select.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="When_executing_select_from_users.cs" />
+    <Compile Include="When_updating_the_client_table.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

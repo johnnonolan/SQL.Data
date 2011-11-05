@@ -49,7 +49,6 @@ namespace SQL.Data.Specifications
                 _.ConnectionString = connectionString;
                 //so here we should enter a record.
                 // or make sure the db is empty
-                //TRUNCATE.TABLE.Users.GO
                 SUTHelpers.DeleteUsers(connectionString);
             };
         Because of = () => result = (_.SELECT * _.FROM.Users).GO();

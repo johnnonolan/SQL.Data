@@ -5,7 +5,7 @@ using Machine.Specifications;
 namespace SQL.Data.Specifications
 {
     [Subject("Inserting")]
-    public class When_inserting_into_the_client_db
+    public class When_inserting_into_the_client_table
     {
         Establish that = () =>
         {
