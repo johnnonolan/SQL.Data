@@ -107,7 +107,6 @@ namespace SQL.Data
             return new SqlStatementFragment(op1 + " <> " + op2);
         }
 
-
         // If you try to get a value of a property 
         // not defined in the class, this method is called.
         public override bool TryGetMember(
