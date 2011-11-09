@@ -7,11 +7,7 @@ namespace SQL.Data
 {
     public class SqlStatementFragment : DynamicObject
     {
-        // The inner dictionary.
-        protected Dictionary<string, object> InnerDictionary
-            = new Dictionary<string, object>();
-
-        
+        protected Dictionary<string, object> InnerDictionary = new Dictionary<string, object>();
 
         protected  string StatementFragement ="";
         protected SqlStatementFragment()
@@ -22,14 +18,12 @@ namespace SQL.Data
             StatementFragement = statementFragement;
         }
 
-
-
         public IEnumerable<DataRecord> GO()
         {
             var newList =  new List<DataRecord>();
             using (var connection = new SqlCeConnection(_.ConnectionString))
             {
-                string commandText = this.ToString();
+                var commandText = this.ToString();
 
                 try
                 {
@@ -55,7 +49,6 @@ namespace SQL.Data
                             }
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -67,7 +60,6 @@ namespace SQL.Data
 
         public override string ToString()
         {
-            //here we should santise.
             if (StatementFragement.StartsWith("INSERT"))
             {  
                 var openBracketPos = StatementFragement.IndexOf('(');
@@ -95,20 +87,16 @@ namespace SQL.Data
             return new SqlStatementFragment(op1+" * "+op2);
         }
 
-
         public static SqlStatementFragment operator ==(SqlStatementFragment op1, dynamic op2)
         {
             return new SqlStatementFragment(op1 + " = " + op2);
         }
-
 
         public static SqlStatementFragment operator !=(SqlStatementFragment op1, dynamic op2)
         {
             return new SqlStatementFragment(op1 + " <> " + op2);
         }
 
-        // If you try to get a value of a property 
-        // not defined in the class, this method is called.
         public override bool TryGetMember(
             GetMemberBinder binder, out object result)
         {
@@ -121,7 +109,6 @@ namespace SQL.Data
             }
             return InnerDictionary.TryGetValue(name, out result);
         }
-
 
         public override bool TrySetMember(
             SetMemberBinder binder, object value)
@@ -147,11 +134,10 @@ namespace SQL.Data
                     else
                         predicateMember += o;  
                   
-
             }
+
             result = new SqlStatementFragment(String.Format("{0} {1} ({2})",StatementFragement,binder.Name,predicateMember));
             return true;
-
         }
     }
 

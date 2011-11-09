@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Dynamic;
 
 namespace SQL.Data
 {
     public class DataRecord : DynamicObject
     {
-
-        // The inner dictionary.
         protected Dictionary<string, object> InnerDictionary
             = new Dictionary<string, object>();
 
@@ -16,8 +13,6 @@ namespace SQL.Data
             InnerDictionary = fieldnames;
         }
 
-        // If you try to get a value of a property 
-        // not defined in the class, this method is called.
         public override bool TryGetMember(
             GetMemberBinder binder, out object result)
         {
@@ -30,6 +25,5 @@ namespace SQL.Data
             }
             return InnerDictionary.TryGetValue(name, out result);
         }
-
     }
 }

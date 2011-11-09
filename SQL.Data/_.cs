@@ -6,6 +6,7 @@
         public static dynamic FROM= new SqlStatementFragment("FROM");
         public static dynamic INSERT = new SqlStatementFragment("INSERT");
         public static dynamic UPDATE = new SqlStatementFragment("UPDATE");
+        public static dynamic DELETE = new SqlStatementFragment("DELETE");
         public static string ConnectionString { get;set; }
     }
 }   

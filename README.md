@@ -14,5 +14,5 @@ Here's how you use it.
 ##UPDATES##
 _.UPDATE.Users.SET.UserName = "Jim";
 ##DELETES##
-
+_DELETE.FROM.USERS.GO()
 
