@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestingDynamic.cs" />
     <Compile Include="When_deleting_from_the_clients_table.cs" />
     <Compile Include="When_inserting_into_the_client_table.cs" />
     <Compile Include="When_calling_select.cs" />

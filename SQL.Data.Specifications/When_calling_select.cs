@@ -51,7 +51,7 @@ namespace SQL.Data.Specifications
             };
         Because of = () => result = (_.SELECT * _.FROM.Users).GO();
         It should_return_a_data_result = () => result.ShouldBeOfType<IEnumerable<DataRecord>>();
-        It should_return_zero_results = () => (result as List<DataRecord>).Count.ShouldEqual(0);
+        It should_return_zero_results = () => ((List<DataRecord>) result).Count.ShouldEqual(0);
         Cleanup after = () => SUTHelpers.DeleteUsers(connectionString);
             static Object result;
         static string connectionString = @"Data Source = |DataDirectory|\TestDb.sdf";

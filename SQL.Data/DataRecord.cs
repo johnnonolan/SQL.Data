@@ -16,12 +16,12 @@ namespace SQL.Data
         public override bool TryGetMember(
             GetMemberBinder binder, out object result)
         {
-            string name = binder.Name.ToLower();
+            string name = binder.Name;
 
             if (!InnerDictionary.TryGetValue(name, out result))
             {
                 result = new SqlStatementFragment(ToString() + ' ' + binder.Name);
-                return true;
+                return false;
             }
             return InnerDictionary.TryGetValue(name, out result);
         }
