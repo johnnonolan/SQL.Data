@@ -1,4 +1,4 @@
-#SQL.DATA#
+# SQL.DATA #
 A micro-orm for people who just don't want to give up the SQL syntax.
 
 
@@ -9,12 +9,12 @@ So I've created this framework to create the best of all worlds!
 
 Here's how you use it.
 
-##SELECTS##
+## SELECTS ##
 (_.SELECT * _.FROM.Users).GO();
-##UPDATES##
+## UPDATES ##
 _.UPDATE.Users.SET.UserName = "Jim";
-##DELETES##
+## DELETES ##
 _DELETE.FROM.USERS.GO();
-#INSERTS#
+# INSERTS #
 _.INSERT.INTO.Users("UserID","UserName","CreatedDate","Price","Active").VALUES(1,"John","01-Jan-2010",200m,true).GO();
 
